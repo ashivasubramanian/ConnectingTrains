@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project default="deploy">
+	<property name="webapps.dir" value="E:\apache-tomcat-7.0.12\webapps"/>
+	<property resource="${profile}_deployment.properties" classpath="."/>
+	<property resource="app.properties" classpath="."/>
+	<fail if="${webapps.dir}" message="Property webapps.dir not set."/>
+	<fail if="${dbmaintain.username}" message="Property url not set."/>
+	<path id="lib">
+		<fileset dir="WEB-INF\lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	<taskdef resource="dbmaintain-anttasks.xml" classpathref="lib"/>
+	
+	<target name="build">
+		<javac srcdir="." destdir="WEB-INF\classes" classpathref="lib" />
+	</target>
+	<target name="war" depends="build">
+		<war destfile="ct.war" webxml="WEB-INF\web.xml">
+			<classes dir="WEB-INF\classes" />
+			<lib dir="WEB-INF\lib" />
+		</war>
+	</target>
+	<target name="deploy" depends="war">
+		<copy file="ct.war" todir="${webapps.dir}"/>
+	</target>
+
+	<target name="updatedb">
+		<updateDatabase scriptlocations="migrations" autocreatedbmaintainscriptstable="true">
+			<database driverclassname="${driver}" url="${url}" username="${dbmigration.username}" password="${dbmigration.password}" 
+				schemanames="${db.name}"/>
+		</updateDatabase>
+	</target>
+
+	<target name="resetdb">
+		<updateDatabase scriptlocations="migrations" cleandb="true" fromscratchenabled="true"  autocreatedbmaintainscriptstable="true">
+			<database driverclassname="${driver}" url="${url}" username="${dbmigration.username}" password="${dbmigration.password}" 
+				schemanames="${db.name}"/>
+		</updateDatabase>
+	</target>
+</project>
