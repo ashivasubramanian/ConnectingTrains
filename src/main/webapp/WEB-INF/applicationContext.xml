@@ -21,7 +21,7 @@
 		<property name="dataSource" ref="dataSource"/>
 		<property name="annotatedPackages">
 			<list>
-				<value>in.connectingtrains.models</value>		
+				<value>in.connecting.trains.models</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

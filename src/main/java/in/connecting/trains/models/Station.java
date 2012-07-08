@@ -1,4 +1,4 @@
-package in.connectingtrains.models;
+package in.connecting.trains.models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
